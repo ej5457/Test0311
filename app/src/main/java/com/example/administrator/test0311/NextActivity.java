@@ -1,8 +1,8 @@
 package com.example.administrator.test0311;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,6 +10,19 @@ import android.widget.Button;
 
 
 public class NextActivity extends ActionBarActivity {
+
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (v.getId() == R.id.first) {
+                Intent intent = new Intent(NextActivity.this, SelectTimeActivity.class);
+                startActivity(intent);
+            } else if (v.getId() == R.id.second) {
+                Intent intent = new Intent(NextActivity.this, SettingActivity.class);
+                startActivity(intent);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +33,6 @@ public class NextActivity extends ActionBarActivity {
         Button b = (Button) findViewById(R.id.second);
         b.setOnClickListener(onClickListener);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -43,21 +55,5 @@ public class NextActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
-
-    View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if(v.getId()==R.id.first){
-                Intent intent = new Intent(NextActivity.this,SelectTimeActivity.class);
-                startActivity(intent);
-            }
-            else if(v.getId()==R.id.second){
-                Intent intent = new Intent(NextActivity.this,SettingActivity.class);
-                startActivity(intent);
-            }
-        }
-    };
 
 }

@@ -147,7 +147,7 @@ public class CountingActivity extends ActionBarActivity {
         if (count <= files.length) {
 
             Log.d("sound", "sound[" + (count - 1) + "] = " + sound[count - 1]);
-            if (sound[count - 1] != null && !"null".equals(sound[count-1])) {
+            if (sound[count - 1] != null && !"null".equals(sound[count - 1])) {
                 Log.d("sound", "get From sound[]");
                 mediaPlayer = MediaPlayer.create(this, Uri.parse(sound[count - 1]));
             } else {

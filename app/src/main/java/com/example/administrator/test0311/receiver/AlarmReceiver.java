@@ -7,12 +7,8 @@ import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.example.administrator.test0311.SelectTimeActivity;
-import com.example.administrator.test0311.SettingActivity;
-import com.example.administrator.test0311.View.TimeSelectView;
 
 public class AlarmReceiver extends BroadcastReceiver {
     public AlarmReceiver() {

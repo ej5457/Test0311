@@ -1,16 +1,8 @@
 package com.example.administrator.test0311.View;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -19,22 +11,80 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.administrator.test0311.R;
-import com.example.administrator.test0311.SettingActivity;
-import com.example.administrator.test0311.receiver.AlarmReceiver;
-
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * TODO: document your custom view class.
  */
 public class TimeSelectView extends LinearLayout {
+    protected CompoundButton.OnCheckedChangeListener mListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            SharedPreferences pref = mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
+            SharedPreferences.Editor ed = pref.edit();
+            if (buttonView.getId() == R.id.alarm_switch) {
+                ed.putBoolean("alarm", isChecked);
+            } else if (buttonView.getId() == R.id.mon) {
+                ed.putBoolean("mon", isChecked);
+            } else if (buttonView.getId() == R.id.tue) {
+                ed.putBoolean("tue", isChecked);
+            } else if (buttonView.getId() == R.id.wed) {
+                ed.putBoolean("wed", isChecked);
+            } else if (buttonView.getId() == R.id.thu) {
+                ed.putBoolean("thu", isChecked);
+            } else if (buttonView.getId() == R.id.fri) {
+                ed.putBoolean("fri", isChecked);
+            } else if (buttonView.getId() == R.id.sat) {
+                ed.putBoolean("sat", isChecked);
+            } else if (buttonView.getId() == R.id.sun) {
+                ed.putBoolean("sun", isChecked);
+            }
+
+            ed.apply();
+        }
+    };
     Context mContext;
+    OnClickListener clickListener = new OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+
+            TextView hour = (TextView) findViewById(R.id.hour_txt);
+            TextView minute = (TextView) findViewById(R.id.minute);
+            Button apm = (Button) findViewById(R.id.apm);
+
+            if (v.getId() == R.id.hup) {
+                hour.setText("" + (Integer.parseInt((String) hour.getText()) + 13) % 12);
+            } else if (v.getId() == R.id.hdown) {
+                hour.setText("" + (Integer.parseInt((String) hour.getText()) + 11) % 12);
+            } else if (v.getId() == R.id.mup) {
+                minute.setText("" + (Integer.parseInt((String) minute.getText()) + 61) % 60);
+            } else if (v.getId() == R.id.mdown) {
+                minute.setText("" + (Integer.parseInt((String) minute.getText()) + 59) % 60);
+            } else if (v.getId() == R.id.apm) {
+                if ("오전".equals(apm.getText())) {
+                    apm.setText("오후");
+                } else {
+                    apm.setText("오전");
+                }
+            }
+
+            SharedPreferences pref = mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
+            SharedPreferences.Editor ed = pref.edit();
+            int hou = Integer.parseInt((String) hour.getText());
+            int min = Integer.parseInt((String) minute.getText());
+            String ap = (String) apm.getText();
+            Log.d("alarmlog", "isalarm = " + pref.getBoolean("alarm", false) + ", hou = " + hou + ", min =" + min);
+
+            ed.putInt("hour", hou);
+            ed.putInt("minute", min);
+            ed.putBoolean("isPM", "오후".equals(ap));
+            ed.apply();
+        }
+
+
+    };
 
 
     public TimeSelectView(Context context) {
@@ -48,7 +98,6 @@ public class TimeSelectView extends LinearLayout {
         mContext = context;
         init(attrs, 0);
     }
-
 
     public TimeSelectView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -117,74 +166,6 @@ public class TimeSelectView extends LinearLayout {
         satSwitch.setOnCheckedChangeListener(mListener);
         sunSwitch.setOnCheckedChangeListener(mListener);
     }
-
-    OnClickListener clickListener = new OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-
-            TextView hour = (TextView) findViewById(R.id.hour_txt);
-            TextView minute = (TextView) findViewById(R.id.minute);
-            Button apm = (Button) findViewById(R.id.apm);
-
-            if (v.getId() == R.id.hup) {
-                hour.setText("" + (Integer.parseInt((String) hour.getText()) + 13) % 12);
-            } else if (v.getId() == R.id.hdown) {
-                hour.setText("" + (Integer.parseInt((String) hour.getText()) + 11) % 12);
-            } else if (v.getId() == R.id.mup) {
-                minute.setText("" + (Integer.parseInt((String) minute.getText()) + 61) % 60);
-            } else if (v.getId() == R.id.mdown) {
-                minute.setText("" + (Integer.parseInt((String) minute.getText()) + 59) % 60);
-            } else if (v.getId() == R.id.apm) {
-                if ("오전".equals(apm.getText())) {
-                    apm.setText("오후");
-                } else {
-                    apm.setText("오전");
-                }
-            }
-
-            SharedPreferences pref = mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
-            SharedPreferences.Editor ed = pref.edit();
-            int hou = Integer.parseInt((String) hour.getText());
-            int min = Integer.parseInt((String) minute.getText());
-            String ap = (String) apm.getText();
-            Log.d("alarmlog", "isalarm = " + pref.getBoolean("alarm", false) + ", hou = " + hou + ", min =" + min);
-
-            ed.putInt("hour", hou);
-            ed.putInt("minute", min);
-            ed.putBoolean("isPM", "오후".equals(ap));
-            ed.apply();
-        }
-
-
-    };
-
-    protected CompoundButton.OnCheckedChangeListener mListener = new CompoundButton.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            SharedPreferences pref = mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
-            SharedPreferences.Editor ed = pref.edit();
-            if (buttonView.getId() == R.id.alarm_switch) {
-                ed.putBoolean("alarm", isChecked);
-            } else if (buttonView.getId() == R.id.mon) {
-                ed.putBoolean("mon", isChecked);
-            } else if (buttonView.getId() == R.id.tue) {
-                ed.putBoolean("tue", isChecked);
-            } else if (buttonView.getId() == R.id.wed) {
-                ed.putBoolean("wed", isChecked);
-            } else if (buttonView.getId() == R.id.thu) {
-                ed.putBoolean("thu", isChecked);
-            } else if (buttonView.getId() == R.id.fri) {
-                ed.putBoolean("fri", isChecked);
-            } else if (buttonView.getId() == R.id.sat) {
-                ed.putBoolean("sat", isChecked);
-            } else if (buttonView.getId() == R.id.sun) {
-                ed.putBoolean("sun", isChecked);
-            }
-
-            ed.apply();
-        }
-    };
 
     @Override
     protected void onDraw(Canvas canvas) {
