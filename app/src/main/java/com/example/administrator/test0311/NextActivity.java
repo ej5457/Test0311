@@ -11,27 +11,14 @@ import android.widget.Button;
 
 public class NextActivity extends ActionBarActivity {
 
-    View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (v.getId() == R.id.first) {
-                Intent intent = new Intent(NextActivity.this, SelectTimeActivity.class);
-                startActivity(intent);
-            } else if (v.getId() == R.id.second) {
-                Intent intent = new Intent(NextActivity.this, SettingActivity.class);
-                startActivity(intent);
-            }
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_next);
-        Button a = (Button) findViewById(R.id.first);
-        a.setOnClickListener(onClickListener);
-        Button b = (Button) findViewById(R.id.second);
-        b.setOnClickListener(onClickListener);
+        Button CountButton = (Button) findViewById(R.id.first);
+        CountButton.setOnClickListener(onClickListener);
+        Button SettingButton = (Button) findViewById(R.id.second);
+        SettingButton.setOnClickListener(onClickListener);
     }
 
     @Override
@@ -55,5 +42,18 @@ public class NextActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (v.getId() == R.id.first) {
+                Intent intent = new Intent(NextActivity.this, SelectTimeActivity.class);
+                startActivity(intent);
+            } else if (v.getId() == R.id.second) {
+                Intent intent = new Intent(NextActivity.this, SettingActivity.class);
+                startActivity(intent);
+            }
+        }
+    };
 
 }

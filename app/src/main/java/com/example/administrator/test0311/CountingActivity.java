@@ -26,20 +26,6 @@ import java.util.TimerTask;
 
 public class CountingActivity extends ActionBarActivity {
     int count = 1;
-    Handler mHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            a.setText("" + msg.what);
-            try {
-                play();
-
-                count++;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    };
     TextView a;
     private MediaPlayer mediaPlayer = null;
     private int finalTime;
@@ -66,7 +52,6 @@ public class CountingActivity extends ActionBarActivity {
             TimerTask task = new TimerTask() {
                 @Override
                 public void run() {
-
                     if (count <= time && !isFinishing()) {
                         Message m = new Message();
                         m.what = count;
@@ -108,10 +93,8 @@ public class CountingActivity extends ActionBarActivity {
         getMenuInflater().inflate(R.menu.menu_counting, menu);
 
         //noinspection SimplifiableIfStatement
-
         if (isMute) {
             menu.getItem(0).setTitle("소리OFF");
-
         }
         return true;
     }
@@ -156,7 +139,6 @@ public class CountingActivity extends ActionBarActivity {
             }
             finalTime = mediaPlayer.getDuration();
             mediaPlayer.start();
-
             timeElapsed = mediaPlayer.getCurrentPosition();
         }
 
@@ -173,5 +155,19 @@ public class CountingActivity extends ActionBarActivity {
         mediaPlayer.pause();
     }
 
+    Handler mHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            a.setText("" + msg.what);
+            try {
+                play();
+
+                count++;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    };
 }
 

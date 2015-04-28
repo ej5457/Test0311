@@ -7,10 +7,10 @@ import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity {
-
     public Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -27,7 +27,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mHandler.sendEmptyMessageDelayed(0, 3000);
+
+        mHandler.sendEmptyMessageDelayed(0, 2000);
+
     }
 
     @Override
@@ -51,4 +53,5 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

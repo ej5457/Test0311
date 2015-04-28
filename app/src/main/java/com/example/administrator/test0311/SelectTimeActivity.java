@@ -15,40 +15,7 @@ import android.widget.EditText;
 
 
 public class SelectTimeActivity extends ActionBarActivity {
-    int time = 1;
-    View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            final Intent intent = new Intent(SelectTimeActivity.this, CountingActivity.class);
 
-            if (v.getId() == R.id.eight) {
-                intent.putExtra("time", 8);
-                startActivity(intent);
-            } else if (v.getId() == R.id.ten) {
-                intent.putExtra("time", 10);
-                startActivity(intent);
-
-            } else if (v.getId() == R.id.fifteen) {
-                intent.putExtra("time", 15);
-                startActivity(intent);
-
-            } else {
-                if (v.getId() == R.id.etc) {
-                    final EditText edit = new EditText(SelectTimeActivity.this);
-                    AlertDialog dialog = new AlertDialog.Builder(SelectTimeActivity.this).setTitle("숫자를 입력하세요").setView(edit).setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            int a = Integer.parseInt(edit.getText().toString());
-                            intent.putExtra("time", a);
-                            startActivity(intent);
-                        }
-                    }).create();
-                    dialog.show();
-                }
-            }
-
-        }
-    };
     private boolean isMute;
 
     @Override
@@ -56,14 +23,14 @@ public class SelectTimeActivity extends ActionBarActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_count);
-        Button a = (Button) findViewById(R.id.eight);
-        a.setOnClickListener(onClickListener);
-        Button b = (Button) findViewById(R.id.ten);
-        b.setOnClickListener(onClickListener);
-        Button c = (Button) findViewById(R.id.fifteen);
-        c.setOnClickListener(onClickListener);
-        Button d = (Button) findViewById(R.id.etc);
-        d.setOnClickListener(onClickListener);
+        Button EightButton = (Button) findViewById(R.id.eight);
+        EightButton.setOnClickListener(onClickListener);
+        Button TenButton = (Button) findViewById(R.id.ten);
+        TenButton.setOnClickListener(onClickListener);
+        Button FifteenButton = (Button) findViewById(R.id.fifteen);
+        FifteenButton.setOnClickListener(onClickListener);
+        Button EtcButton = (Button) findViewById(R.id.etc);
+        EtcButton.setOnClickListener(onClickListener);
 
         final Intent intent = getIntent();
         final boolean alarm = intent.getBooleanExtra("alarm", false);
@@ -113,5 +80,37 @@ public class SelectTimeActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final Intent intent = new Intent(SelectTimeActivity.this, CountingActivity.class);
+
+            if (v.getId() == R.id.eight) {
+                intent.putExtra("time", 8);
+                startActivity(intent);
+            } else if (v.getId() == R.id.ten) {
+                intent.putExtra("time", 10);
+                startActivity(intent);
+
+            } else if (v.getId() == R.id.fifteen) {
+                intent.putExtra("time", 15);
+                startActivity(intent);
+
+            } else {
+                if (v.getId() == R.id.etc) {
+                    final EditText edit = new EditText(SelectTimeActivity.this);
+                    AlertDialog dialog = new AlertDialog.Builder(SelectTimeActivity.this).setTitle("숫자를 입력하세요").setView(edit).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            int a = Integer.parseInt(edit.getText().toString());
+                            intent.putExtra("time", a);
+                            startActivity(intent);
+                        }
+                    }).create();
+                    dialog.show();
+                }
+            }
+        }
+    };
 
 }

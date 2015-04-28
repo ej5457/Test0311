@@ -32,81 +32,6 @@ public class SettingActivity extends ActionBarActivity {
 
     private final int RESULT_LOAD_IMAGE = 1001;
     private final int[] RESULT_LOAD_AUDIO = {1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015, 1016};
-    ListView.OnItemClickListener clickListener = new ListView.OnItemClickListener() {
-
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (position == 1) {
-                final CharSequence day[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
-
-                AlertDialog.Builder dialog = new AlertDialog.Builder(SettingActivity.this);
-                dialog.setTitle("목소리를 바꿀 숫자를 선택하세요");
-                dialog.setItems(day, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int item) {
-                        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(intent, RESULT_LOAD_AUDIO[item]);
-                    }
-                });
-
-                dialog.create();
-                dialog.show();
-            } else if (position == 2) {
-                Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
-            } else if (position == 3) {
-                AlertDialog dialog = new AlertDialog.Builder(SettingActivity.this).setTitle("알람 설정").setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        SharedPreferences pref = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-                        Intent intent = new Intent(SettingActivity.this, AlarmReceiver.class);
-                        PendingIntent sender = PendingIntent.getBroadcast(SettingActivity.this, 0,
-                                intent, 0);
-                        // We want the alarm to go off 30 seconds from now.
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.setTimeInMillis(System.currentTimeMillis());
-                        Calendar time = Calendar.getInstance();
-                        time.setTimeInMillis(System.currentTimeMillis());
-
-                        int hour = pref.getInt("hour", 0);
-                        int minute = pref.getInt("minute", 0);
-                        Boolean apm = pref.getBoolean("isPM", false);
-                        Boolean alarm = pref.getBoolean("alarm", true);
-
-                        Boolean day_switch[] = {pref.getBoolean("sun", false), pref.getBoolean("mon", false), pref.getBoolean("tue", false), pref.getBoolean("wed", false), pref.getBoolean("thu", false), pref.getBoolean("fri", false), pref.getBoolean("sat", false)};
-
-                        if (alarm) {
-                            time.set(Calendar.HOUR, hour);
-                            time.set(Calendar.MINUTE, minute);
-                            time.set(Calendar.SECOND, 0);
-                            time.set(Calendar.AM_PM, (!apm) ? Calendar.AM : Calendar.PM);
-                        }
-                        for (int i = 0; i < 7; i++) {
-                            if (day_switch[i].equals(true)) {
-                                time.set(Calendar.DAY_OF_WEEK, i + 1);
-
-//                                if (calendar.getTimeInMillis() > time.getTimeInMillis()) {
-//                                    time.add(Calendar.HOUR, 24);
-//                                }
-
-                                // Schedule the alarm!
-                                Log.d("asdf", "" + time.getTimeInMillis());
-                                AlarmManager am = (AlarmManager) SettingActivity.this.getSystemService(Context.ALARM_SERVICE);
-                                am.setRepeating(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), 7 * 24 * 60 * 60 * 1000, sender);
-                            }
-                        }
-
-
-                        Toast.makeText(SettingActivity.this, (!apm ? "오전" : "오후") + hour + "시" + minute + "분", Toast.LENGTH_SHORT).show();
-                    }
-                }).create();
-
-                dialog.setView(new TimeSelectView(SettingActivity.this));
-                dialog.show();
-            }
-        }
-    };
     private String[] audioPaths = new String[15];
     private ListView listView;
     private ArrayAdapter<String> adapter;
@@ -184,7 +109,6 @@ public class SettingActivity extends ActionBarActivity {
                 String audioPath = cursor.getString(columnIndex);
                 cursor.close();
 
-
                 SharedPreferences pref = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
                 SharedPreferences.Editor ed = pref.edit();
                 audioPaths[num] = audioPath;
@@ -200,5 +124,82 @@ public class SettingActivity extends ActionBarActivity {
             }
         }
     }
+
+
+    ListView.OnItemClickListener clickListener = new ListView.OnItemClickListener() {
+
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (position == 1) {
+                final CharSequence day[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(SettingActivity.this);
+                dialog.setTitle("목소리를 바꿀 숫자를 선택하세요");
+                dialog.setItems(day, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(intent, RESULT_LOAD_AUDIO[item]);
+                    }
+                });
+
+                dialog.create();
+                dialog.show();
+            } else if (position == 2) {
+                Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, RESULT_LOAD_IMAGE);
+            } else if (position == 3) {
+                AlertDialog dialog = new AlertDialog.Builder(SettingActivity.this).setTitle("알람 설정").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences pref = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+                        Intent intent = new Intent(SettingActivity.this, AlarmReceiver.class);
+                        PendingIntent sender = PendingIntent.getBroadcast(SettingActivity.this, 0,
+                                intent, 0);
+                        // We want the alarm to go off 30 seconds from now.
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(System.currentTimeMillis());
+                        Calendar time = Calendar.getInstance();
+                        time.setTimeInMillis(System.currentTimeMillis());
+
+                        int hour = pref.getInt("hour", 0);
+                        int minute = pref.getInt("minute", 0);
+                        Boolean apm = pref.getBoolean("isPM", false);
+                        Boolean alarm = pref.getBoolean("alarm", true);
+
+                        Boolean day_switch[] = {pref.getBoolean("sun", false), pref.getBoolean("mon", false), pref.getBoolean("tue", false), pref.getBoolean("wed", false), pref.getBoolean("thu", false), pref.getBoolean("fri", false), pref.getBoolean("sat", false)};
+
+                        if (alarm) {
+                            time.set(Calendar.HOUR, hour);
+                            time.set(Calendar.MINUTE, minute);
+                            time.set(Calendar.SECOND, 0);
+                            time.set(Calendar.AM_PM, (!apm) ? Calendar.AM : Calendar.PM);
+                        }
+                        for (int i = 0; i < 7; i++) {
+                            if (day_switch[i].equals(true)) {
+                                time.set(Calendar.DAY_OF_WEEK, i + 1);
+
+//                                if (calendar.getTimeInMillis() > time.getTimeInMillis()) {
+//                                    time.add(Calendar.HOUR, 24);
+//                                }
+
+                                // Schedule the alarm!
+                                Log.d("asdf", "" + time.getTimeInMillis());
+                                AlarmManager am = (AlarmManager) SettingActivity.this.getSystemService(Context.ALARM_SERVICE);
+                                am.setRepeating(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), 7 * 24 * 60 * 60 * 1000, sender);
+                            }
+                        }
+
+
+                        Toast.makeText(SettingActivity.this, (!apm ? "오전" : "오후") + hour + "시" + minute + "분", Toast.LENGTH_SHORT).show();
+                    }
+                }).create();
+
+                dialog.setView(new TimeSelectView(SettingActivity.this));
+                dialog.show();
+            }
+        }
+    };
 
 }

@@ -18,6 +18,7 @@ import com.example.administrator.test0311.R;
  * TODO: document your custom view class.
  */
 public class TimeSelectView extends LinearLayout {
+
     protected CompoundButton.OnCheckedChangeListener mListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -111,11 +112,11 @@ public class TimeSelectView extends LinearLayout {
         View v = inflate(mContext, R.layout.sample_time_select_view, null);
         addView(v);
 
-        Button hup = (Button) findViewById(R.id.hup);
-        Button hdown = (Button) findViewById(R.id.hdown);
-        Button mup = (Button) findViewById(R.id.mup);
-        Button mdown = (Button) findViewById(R.id.mdown);
-        Button apmButton = (Button) findViewById(R.id.apm);
+        Button HourupButton = (Button) findViewById(R.id.hup);
+        Button HourdownButton = (Button) findViewById(R.id.hdown);
+        Button MinuteupButton = (Button) findViewById(R.id.mup);
+        Button MinutedownButton = (Button) findViewById(R.id.mdown);
+        Button ApmButton = (Button) findViewById(R.id.apm);
         CheckBox alarmSwitch = (CheckBox) findViewById(R.id.alarm_switch);
         TextView hourView = (TextView) findViewById(R.id.hour_txt);
         TextView minuteView = (TextView) findViewById(R.id.minute);
@@ -140,7 +141,7 @@ public class TimeSelectView extends LinearLayout {
         if (hour >= 0 && minute >= 0) {
             hourView.setText(hour + "");
             minuteView.setText(minute + "");
-            apmButton.setText((!isPM) ? "오전" : "오후");
+            ApmButton.setText((!isPM) ? "오전" : "오후");
             alarmSwitch.setChecked(isAlarm);
             sunSwitch.setChecked(isDaySwitch[0]);
             monSwitch.setChecked(isDaySwitch[1]);
@@ -152,11 +153,11 @@ public class TimeSelectView extends LinearLayout {
         }
 
 
-        hup.setOnClickListener(clickListener);
-        hdown.setOnClickListener(clickListener);
-        mup.setOnClickListener(clickListener);
-        mdown.setOnClickListener(clickListener);
-        apmButton.setOnClickListener(clickListener);
+        HourupButton.setOnClickListener(clickListener);
+        HourdownButton.setOnClickListener(clickListener);
+        MinuteupButton.setOnClickListener(clickListener);
+        MinutedownButton.setOnClickListener(clickListener);
+        ApmButton.setOnClickListener(clickListener);
         alarmSwitch.setOnCheckedChangeListener(mListener);
         monSwitch.setOnCheckedChangeListener(mListener);
         tueSwitch.setOnCheckedChangeListener(mListener);
